@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loading and Parsing CSV Data</title>
+    <script src="https://unpkg.com/d3@5.11.0/dist/d3.min.js"></script>
+    <style>
+      pre {
+        font-size: 7em;
+      }
+    </style>
+  </head>
+  <body>
+    <pre id="message-container"></pre>
+    <script>
+
+      const csvUrl = 'https://gist.githubusercontent.com/curran/b236990081a24761f7000567094914e0/raw/cssNamedColors.csv';
+
+      // With d3.csv
+      d3.csv(csvUrl).then(data => {
+        let message = '';
+        message = message + Math.round(d3.csvFormat(data).length / 1024) + ' kB\n';
+        message = message + data.length + ' rows\n';
+        message = message + data.columns.length + ' columns';
+        document.getElementById('message-container').textContent = message;
+      });
+
+      // With fetch, async, and await.
+      // const fetchText = async (url) => {
+      //   const response = await fetch(url);
+      //   return await response.text();
+      // };
+      // fetchText(csvUrl).then(text => {
+      //   const data = d3.csvParse(text);
+      //   let message = '';
+      //   message = message + Math.round(text.length / 1024) + ' kB\n';
+      //   message = message + data.length + ' rows\n';
+      //   message = message + data.columns.length + ' columns';
+      //   document.getElementById('message-container').textContent = message;
+      // });
+
+      // Pyramid of Doom.
+      // fetch(url).then(response => {
+      //   response.text().then(text => {
+      //     console.log(text);
+      //   });
+      // });
+
+    </script>
+  </body>
+</html>
