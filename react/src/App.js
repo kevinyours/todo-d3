@@ -1,7 +1,7 @@
-import * as d3 from 'd3';
-import { useState } from 'react';
+import { csv } from 'd3';
+import { useEffect, useState } from 'react';
 
-// 3:02
+// 4:26:43 Visualizing Data with React & D3
 
 const width = 960;
 const height = 500;
@@ -12,9 +12,13 @@ const csvUrl =
 
 function App() {
   const [data, setData] = useState(null);
-  d3.csv(csvUrl).then(setData);
 
-  return <div>Data is {data ? 'loaded' : 'loading'} </div>;
+  useEffect(() => {
+    csv(csvUrl).then(setData);
+  }, []);
+
+  return <div>Data is {data ? 'loaded' : 'loading'}</div>;
+
   // const [mousePosition, setMousePosition] = useState(initialMousePosition);
 
   // const handleMouseMove = useCallback(
