@@ -1,8 +1,8 @@
 async function draw() {
   // Data
-  const dataset = await d3.csv('data.csv');
+  const dataset = await d3.csv("data.csv");
 
-  const parseData = d3.timeParse('%Y-%m-%d');
+  const parseData = d3.timeParse("%Y-%m-%d");
   const xAccessor = (d) => parseData(d.date);
   const yAccessor = (d) => parseInt(d.close);
 
@@ -18,15 +18,15 @@ async function draw() {
 
   // Draw Image
   const svg = d3
-    .select('#chart')
-    .append('svg')
-    .attr('width', dimensions.width)
-    .attr('height', dimensions.height);
+    .select("#chart")
+    .append("svg")
+    .attr("width", dimensions.width)
+    .attr("height", dimensions.height);
 
   const ctr = svg
-    .append('g') // <g>
+    .append("g") // <g>
     .attr(
-      'transform',
+      "transform",
       `translate(${dimensions.margins}, ${dimensions.margins})`
     );
 
@@ -50,52 +50,52 @@ async function draw() {
     .y((d) => yScale(yAccessor(d)));
 
   ctr
-    .append('path')
+    .append("path")
     .datum(dataset)
-    .attr('d', lineGenerator)
-    .attr('fill', 'none')
-    .attr('stroke', '#30475e')
-    .attr('stroke-width', 2)
-    .on('touchmouse mousemove', function (event) {
+    .attr("d", lineGenerator)
+    .attr("fill", "none")
+    .attr("stroke", "#30475e")
+    .attr("stroke-width", 2)
+    .on("touchmouse mousemove", function (event) {
       const mousePos = d3.pointer(event, this);
       console.log(mousePos);
     })
-    .on('mouseleave', function (event) {});
+    .on("mouseleave", function (event) {});
 
   // Axis
   const yAxis = d3.axisLeft(yScale).tickFormat((d) => `${d}`);
 
-  ctr.append('g').call(yAxis);
+  ctr.append("g").call(yAxis);
 
   const xAxis = d3.axisBottom(xScale);
 
   ctr
-    .append('g')
-    .style('transform', `translateY(${dimensions.ctrHeight}px)`)
+    .append("g")
+    .style("transform", `translateY(${dimensions.ctrHeight}px)`)
     .call(xAxis);
 
-  const tooltip = d3.select('#tooltip');
+  const tooltip = d3.select("#tooltip");
   const tooltipDot = ctr
-    .append('circle')
-    .attr('r', 5)
-    .attr('fill', '#fc8781')
-    .attr('stroke', 'black')
-    .attr('stroke-width', 2)
-    .style('opacity', 0)
-    .style('pointer-events', 'none');
+    .append("circle")
+    .attr("r", 5)
+    .attr("fill", "#fc8781")
+    .attr("stroke", "black")
+    .attr("stroke-width", 2)
+    .style("opacity", 0)
+    .style("pointer-events", "none");
 
   ctr
-    .append('g')
-    .style('transform', `translateY(${dimensions.ctrHeight}px)`)
+    .append("g")
+    .style("transform", `translateY(${dimensions.ctrHeight}px)`)
     .call(xAxis);
 
   // invisible box 를 만들어서 차트 전체의 이벤트를 트리거
   ctr
-    .append('rect')
-    .attr('width', dimensions.ctrWidth)
-    .attr('height', dimensions.ctrHeight)
-    .style('opacity', 0)
-    .on('touchmouse mousemove', function (event) {
+    .append("rect")
+    .attr("width", dimensions.ctrWidth)
+    .attr("height", dimensions.ctrHeight)
+    .style("opacity", 0)
+    .on("touchmouse mousemove", function (event) {
       const mousePos = d3.pointer(event, this);
       const date = xScale.invert(mousePos[0]);
 
@@ -106,26 +106,26 @@ async function draw() {
 
       // Update Image
       tooltipDot
-        .style('opacity', 1)
-        .attr('cx', xScale(xAccessor(stock)))
-        .attr('cy', yScale(yAccessor(stock)))
+        .style("opacity", 1)
+        .attr("cx", xScale(xAccessor(stock)))
+        .attr("cy", yScale(yAccessor(stock)))
         .raise();
 
       tooltip
-        .style('display', 'block')
-        .style('top', yScale(yAccessor(stock)) - 20 + 'px')
-        .style('left', xScale(xAccessor(stock)) + 'px');
+        .style("display", "block")
+        .style("top", yScale(yAccessor(stock)) - 20 + "px")
+        .style("left", xScale(xAccessor(stock)) + "px");
 
-      tooltip.select('.price').text(`$${yAccessor(stock)}`);
+      tooltip.select(".price").text(`$${yAccessor(stock)}`);
 
-      const dateFormatter = d3.timeFormat('%B %-d %Y');
+      const dateFormatter = d3.timeFormat("%B %-d %Y");
 
-      tooltip.select('.date').text(`${dateFormatter(xAccessor(stock))}`);
+      tooltip.select(".date").text(`${dateFormatter(xAccessor(stock))}`);
     })
-    .on('mouseleave', function (event) {
-      tooltipDot.style('opacity', 0);
+    .on("mouseleave", function (event) {
+      tooltipDot.style("opacity", 0);
 
-      tooltip.style('display', 'none');
+      tooltip.style("display", "none");
     });
 }
 
